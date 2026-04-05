@@ -1,0 +1,69 @@
+﻿using Application.Auth.Login;
+using Application.Auth.Register;
+using Domain.Entities.Identity;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace SilpoApi.Controllers;
+
+[Route("api/[controller]/[action]")]
+[ApiController]
+public class AuthController(IMediator mediator, 
+    UserManager<UserEntity> userManager) : ControllerBase
+{
+    [HttpPost]
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+    {
+        try
+        {
+            var result = await mediator.Send(new LoginCommand
+            {
+                Email = request.Email,
+                Password = request.Password
+            });
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+    {
+        try
+        {
+            await mediator.Send(new RegisterCommand
+            {
+                Email = request.Email,
+                Password = request.Password,
+                FirstName = request.FirstName,
+                LastName = request.LastName
+            });
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        var users = await userManager.Users
+            .Select(
+            x => new
+            {
+                x.Id,
+                x.Email,
+                FullName = x.LastName + " " + x.FirstName
+
+            }).ToListAsync();
+        return Ok(users);
+    }
+}
