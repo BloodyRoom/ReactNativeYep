@@ -21,14 +21,15 @@ services:
       - npd421_net
 
   api:
-    image: bloodyroom/npd421-silpo-home-api:latest
-    container_name: npd421-silpo-home-api-container
+    image: novakvova/npd421-api:latest
+    container_name: npd421-api-container
     restart: unless-stopped
     volumes:
       - ${VOLUME_SERVERAPI}
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Host=db;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      ServerRunUrl: "https://silpo.itstep.click"
     ports:
       - "127.0.0.1:4081:8080"
     depends_on:
@@ -57,4 +58,3 @@ services:
           sleep 86400
         done
       "
- 

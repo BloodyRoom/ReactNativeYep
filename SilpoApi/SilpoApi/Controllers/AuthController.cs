@@ -1,5 +1,4 @@
 ﻿using Application.Auth.Login;
-using Application.Auth.Register;
 using Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -31,27 +30,6 @@ public class AuthController(IMediator mediator,
             return BadRequest(ex.Message);
         }
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
-    {
-        try
-        {
-            await mediator.Send(new RegisterCommand
-            {
-                Email = request.Email,
-                Password = request.Password,
-                FirstName = request.FirstName,
-                LastName = request.LastName
-            });
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
