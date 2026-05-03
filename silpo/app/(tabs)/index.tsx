@@ -44,6 +44,17 @@ export default function HomeScreen() {
                     Вхід
                 </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+                activeOpacity={0.85}
+                onPress={() => router.replace("/register")}
+                className="bg-emerald-500 py-4 rounded-2xl items-center mx-6"
+            >
+                <Text className="text-white text-lg font-bold">
+                    Реєстрація
+                </Text>
+            </TouchableOpacity>
+
             <View>
                 <Text className={"text-3xl color-blue-600 font-bold"}>Привіт козаки і козачки</Text>
             </View>

@@ -13,10 +13,11 @@ import { useForm } from 'react-hook-form';
 import {EmailInput} from "@/components/form/EmailInput";
 import {ILogin} from "@/types/auth/ILogin";
 import {PasswordInput} from "@/components/form/PasswordInput";
-import {useLoginMutation} from "@/services/AuthService";
+import {useRegisterMutation} from "@/services/AuthService";
+import {IRegister} from "@/types/auth/IRegister";
 import {router} from "expo-router";
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
     const { control, handleSubmit, formState: { errors } } = useForm<ILogin>({
         defaultValues: {
             email: '',
@@ -25,13 +26,13 @@ export default function LoginScreen() {
         mode: 'onBlur',
     });
 
-    const [login, {isLoading, error}] = useLoginMutation();
+    const [register, {isLoading, error}] = useRegisterMutation();
 
 
-    const onSubmit = async (data: ILogin) => {
+    const onSubmit = async (data: IRegister) => {
         try {
             console.log('Form data:', data);
-            const result = await login(data).unwrap();
+            const result = await register(data).unwrap();
             console.log(result);
         }
         catch(ex) {
@@ -58,10 +59,10 @@ export default function LoginScreen() {
                             </Text>
                         </View>
                         <Text className="text-3xl font-bold text-slate-900 dark:text-white">
-                            Вхід до Silpo
+                            Реєстрація до Silpo
                         </Text>
                         <Text className="text-base text-slate-600 dark:text-slate-400">
-                            Введіть свої дані для входу
+                            Введіть свої дані для реєстрації
                         </Text>
                     </View>
 
@@ -118,7 +119,7 @@ export default function LoginScreen() {
                                 />
                             ) : (
                                 <Text className="text-white dark:text-slate-900 font-semibold text-base">
-                                    Увійти
+                                    Зареєструватись
                                 </Text>
                             )}
                         </TouchableOpacity>
@@ -127,11 +128,11 @@ export default function LoginScreen() {
                     {/* Register Link */}
                     <View className="flex-row justify-center items-center gap-1">
                         <Text className="text-slate-600 dark:text-slate-400 text-sm">
-                            Немає акаунту?
+                            Вже маєте аккаунт?
                         </Text>
-                        <TouchableOpacity disabled={isLoading} onPress={() => router.replace("/register")}>
+                        <TouchableOpacity disabled={isLoading}  onPress={() => router.replace("/login")}>
                             <Text className="text-slate-900 dark:text-white font-semibold text-sm">
-                                Зареєструватись
+                                Увійти
                             </Text>
                         </TouchableOpacity>
                     </View>
