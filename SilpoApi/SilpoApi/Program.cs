@@ -1,4 +1,5 @@
 using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,22 @@ builder.Services.AddOpenApi(options =>
             ];
 
         return Task.CompletedTask;
+    });
+
+
+    options.AddDocumentTransformer(async (document, context, cancellationToken) =>
+    {
+        document.Components ??= new OpenApiComponents();
+
+        document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "JWT токен"
+        };
     });
 });
 

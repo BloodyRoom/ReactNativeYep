@@ -1,3 +1,1 @@
-export interface IRegisterResponse {
-    token: string;
-}
+export interface IRegisterResponse {}

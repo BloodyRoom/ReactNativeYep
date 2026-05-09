@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
-    ActivityIndicator,
+    ActivityIndicator, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm } from 'react-hook-form';
@@ -15,6 +15,7 @@ import {ILogin} from "@/types/auth/ILogin";
 import {PasswordInput} from "@/components/form/PasswordInput";
 import {useLoginMutation} from "@/services/AuthService";
 import {router} from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
     const { control, handleSubmit, formState: { errors } } = useForm<ILogin>({
@@ -27,17 +28,31 @@ export default function LoginScreen() {
 
     const [login, {isLoading, error}] = useLoginMutation();
 
+    useEffect(() => {
+         async function checkLogin() {
+             if (await AsyncStorage.getItem('accessToken'))
+             {
+                 router.replace("/profile")
+             }
+         }
+         checkLogin();
+     }, [])
 
     const onSubmit = async (data: ILogin) => {
         try {
             console.log('Form data:', data);
+
             const result = await login(data).unwrap();
             console.log(result);
-        }
-        catch(ex) {
+
+            await AsyncStorage.setItem('accessToken', result.token);
+
+            Alert.alert("Вхід успішний", "Ми Вас вітаємо. Успішно.");
+
+            router.replace("/profile")
+        } catch (ex) {
             console.log('Error occured', ex);
-        }
-        finally {
+        } finally {
             // setIsLoading(false);
         }
     };

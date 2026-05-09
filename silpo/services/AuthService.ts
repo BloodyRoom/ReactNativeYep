@@ -3,8 +3,8 @@ import {BASE_URL} from "@/constants/Urls";
 import {IUserView} from "@/types/auth/IUserView";
 import {ILoginResponse} from "@/types/auth/ILoginResponse";
 import {ILogin} from "@/types/auth/ILogin";
+import { IRegisterResponse } from "@/types/auth/IRegisterResponse";
 import {IRegister} from "@/types/auth/IRegister";
-import {IRegisterResponse} from "@/types/auth/IRegisterResponse";
 
 export const AuthService = createApi({
    reducerPath: "authService",
